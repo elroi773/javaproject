@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커뮤니티 게시판</title>
+    <link rel="stylesheet" href="대신전해드립니다게시판.css" type="text/css">
+</head>
+<body>
+    <div class="container">
+        <!-- 게시물 작성 폼 -->
+        <div class="post-form">
+            <h2>새 게시물 작성하기</h2>
+            <input type="text" id="post-title" placeholder="제목을 입력하세요" required>
+            <textarea id="post-content" rows="5" placeholder="내용을 입력하세요" required></textarea>
+            <button onclick="submitPost()">게시하기</button>
+        </div>
+        
+        <!-- 익명/노익명 전환 버튼 -->
+        <div class="anonymous-toggle">
+            <button id="anonymous-btn" onclick="toggleAnonymous(true)">익명</button>
+            <button id="no-anonymous-btn" class="active" onclick="toggleAnonymous(false)">노익명</button>
+        </div>
+
+         <!-- 로그인된 사용자 정보 -->
+         <div id="user-info">
+            로그인된 사용자: <span id="logged-in-user">홍길동</span>
+        </div>
+    </div>
+    <script src="대신전해드립니다게시판.js"></script>
+</body>
+</html>
