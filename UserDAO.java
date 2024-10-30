@@ -33,7 +33,7 @@ public class UserDAO {
 					return 1; //로그인 성공
 				}else
 					return 0; //비밀번호 불일치 
-			}return -1;//아이디ㅣ가 없음
+			} return -1;//아이디ㅣ가 없음
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
