@@ -8,7 +8,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- 게시물 작성 폼 -->
         <div class="post-form">
             <h2>새 게시물 작성하기</h2>
             <input type="text" id="post-title" placeholder="제목을 입력하세요" required>
@@ -16,13 +15,11 @@
             <button onclick="submitPost()">게시하기</button>
         </div>
         
-        <!-- 익명/노익명 전환 버튼 -->
         <div class="anonymous-toggle">
             <button id="anonymous-btn" onclick="toggleAnonymous(true)">익명</button>
             <button id="no-anonymous-btn" class="active" onclick="toggleAnonymous(false)">노익명</button>
         </div>
 
-         <!-- 로그인된 사용자 정보 -->
          <div id="user-info">
             로그인된 사용자: <span id="logged-in-user">홍길동</span>
         </div>
