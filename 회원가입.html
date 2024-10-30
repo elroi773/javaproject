@@ -12,10 +12,14 @@
         <h1 class="signup-title">회원가입</h1>
         <form id="signupForm" class="signup-form">
             <input type="text" id="username" placeholder="아이디" class="signup-input">
-            <input type="text" id="userschool" placeholder="학교" class="signup-input">
-            <input type="email" id="email" placeholder="이메일" class="signup-input">
             <input type="password" id="password" placeholder="비밀번호" class="signup-input">
             <input type="password" id="confirmPassword" placeholder="비밀번호 확인" class="signup-input">
+            <input type="text" id="userschool" placeholder="학교" class="signup-input">
+            <input type="email" id="email" placeholder="이메일" class="signup-input">
+            <div class = "email_check">
+                <input type = "email_check" id = "email_check" placeholder="인증번호" class = "signup-input">
+                <button class = "check_email_button">인증번호 확인</button>
+            </div>
             <button type="button" onclick="submitSignup()" class="signup-button">가입하기</button>
             <p id="errorMessage" class="error-message" style="display: none;">모든 필드를 채우고 비밀번호를 확인하세요</p>
         </form>
