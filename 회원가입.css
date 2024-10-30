@@ -127,3 +127,11 @@ body {
         width: 90%;
     }
 }
+
+.check_email_button{
+    font-family: 'GmarketSansMedium';
+    background-color: #4cae4f;
+    color: white;
+    border-radius: 10%;
+    size: 30px;
+}
