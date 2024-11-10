@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
+    <link rel="stylesheet" href="대신전해드립니다회원가입수정.css">
+</head>
+<body>
+    <div class="signup-container">
+        <h1 class="signup-title">회원가입</h1>
+        <form id="signupForm" class="signup-form">
+            <input type="text" id="username" placeholder="아이디" class="signup-input" required>
+            <input type="password" id="password" placeholder="비밀번호" class="signup-input" required>
+            <input type="password" id="confirmPassword" placeholder="비밀번호 확인" class="signup-input" required>
+            <input type="text" id="userSchool" placeholder="학교" class="signup-input" required>
+            <input type="text" id="userEmail" placeholder="이메일" class="signup-input" required>
+
+            <!-- 인증번호 전송 버튼 -->
+            <button type="button" onclick="sendVerificationCode()" class="signup-button">인증번호 전송</button>
+
+            <!-- 인증번호 입력 필드 -->
+            <div class="verification-field" id="verificationField">
+                <input type="text" id="verificationCode" placeholder="인증번호 입력" class="signup-input" required>
+                <button type="button" onclick="verifyCode()" class="signup-button" id = "signup-button1">인증하기</button>
+            </div>
+
+            <!-- 가입하기 버튼 -->
+            <button type="button" onclick="submitSignup()" class="signup-button">가입하기</button>
+            <p id="errorMessage" class="error-message" style="display: none;">모든 필드를 채워주세요</p>
+        </form>
+    </div>
+</body>
