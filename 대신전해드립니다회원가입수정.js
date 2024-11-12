@@ -20,36 +20,6 @@ function submitSignup() {
     }
 }
 
-(function(){
-    emailjs.init("UygOBJObCFbHWOLzb");
-})();
-
-let verificationCode = "";
-
-function sendVerificationCode(){
-    verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-    
-    emailjs.send("service_g6iu7xz","template_003kqyx",{
-        user_email: document.getElementById("userEmail").value,
-                verification_code: verificationCode
-            }).then((response) => {
-                alert("인증번호가 전송되었습니다.");
-                document.getElementById("verificationField").style.display = "block";
-            }).catch((error) => {
-                alert("인증번호 전송에 실패했습니다.");
-                console.error("EmailJS Error:", error);
-            });
-    
+function goToEmailVerification() {
+    window.location.href = "EmailJss.html";
 }
-
-function verifyCode() {
-    const inputCode = document.getElementById("verificationCode").value;
-    if (inputCode === verificationCode) {
-        alert("인증에 성공하였습니다.");
-    } else {
-        alert("인증번호가 올바르지 않습니다.");
-    }
-}
-
-
-
