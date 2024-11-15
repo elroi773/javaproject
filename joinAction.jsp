@@ -1,4 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="true" %>
+<%@ page import="javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpSession" %>
+
 <%@ page import="java.io.*, java.sql.*" %>
 <!DOCTYPE html>
 <html lang="ko">
