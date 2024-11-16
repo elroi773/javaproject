@@ -1,7 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" session="true" %>
-<%@ page import="javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpSession" %>
-
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -9,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
     <style>
-@font-face {
+        @font-face {
             font-family: 'GmarketSansMedium';
             src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
             font-weight: normal;
@@ -120,20 +117,12 @@
             .signup-container {
                 width: 90%;
             }
-        }    </style>
+        }
+    </style>
 </head>
 <body>
-    <div class="signup-container">
+     <div class="signup-container">
         <h1 class="signup-title">회원가입</h1>
-          <%
-            HttpSession session = request.getSession();
-            String username = (String) session.getAttribute("username");
-            String password = (String) session.getAttribute("password");
-            String confirmPassword = (String) session.getAttribute("confirmPassword");
-            String userschool = (String) session.getAttribute("userschool");
-            String email = (String) session.getAttribute("email");
-        %>
-        ..
         <form id="signupForm" class="signup-form" action="email.jsp" method="get" onsubmit="saveInputs()">
             <input type="text" id="username" placeholder="아이디" class="signup-input">
             <input type="password" id="password" placeholder="비밀번호" class="signup-input">
@@ -145,6 +134,7 @@
             <p id="errorMessage" class="error-message" style="display: none;">모든 필드를 채워주세요</p>
         </form>
     </div>
+    
     <script>
         // 입력된 데이터 저장 함수
         function saveInputs() {
