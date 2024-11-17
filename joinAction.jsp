@@ -8,15 +8,22 @@
     String userSchool = request.getParameter("userSchool");
     String userEmail = request.getParameter("userEmail");
 
-    System.out.println("joinAction.jsp 호출됨");
-    out.println("joinAction.jsp 호출 확인");
-    
+    // 입력값이 비어 있으면 처리
+    if (userID == null || userID.trim().isEmpty() || 
+        userPassword == null || userPassword.trim().isEmpty() ||
+        userSchool == null || userSchool.trim().isEmpty() ||
+        userEmail == null || userEmail.trim().isEmpty()) {
+        out.println("<script>alert('모든 필드를 입력해야 합니다.'); history.back();</script>");
+        return;
+    }
+
+    // 데이터베이스 연결
     Connection conn = null;
     PreparedStatement pstmt = null;
     String sql = "INSERT INTO users (userID, userPassword, userSchool, userEmail) VALUES (?, ?, ?, ?)";
-    
+
     try {
-        // 데이터베이스 연결
+        // MySQL 드라이버 로드 및 연결
         Class.forName("com.mysql.cj.jdbc.Driver");
         conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/bbs", "root", "Mysql4344!");
 
@@ -34,9 +41,8 @@
         } else {
             out.println("<script>alert('회원가입 실패! 다시 시도해주세요.'); history.back();</script>");
         }
-
     } catch (Exception e) {
-        e.printStackTrace();
+    	e.printStackTrace();
         out.println("<script>alert('오류가 발생했습니다. 관리자에게 문의하세요.'); history.back();</script>");
     } finally {
         try { if (pstmt != null) pstmt.close(); } catch (Exception e) {}
