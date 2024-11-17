@@ -123,59 +123,61 @@
 <body>
      <div class="signup-container">
         <h1 class="signup-title">회원가입</h1>
-        <form id="signupForm" class="signup-form" action="email.jsp" method="get" onsubmit="saveInputs()">
-            <input type="text" id="username" placeholder="아이디" class="signup-input">
-            <input type="password" id="password" placeholder="비밀번호" class="signup-input">
-            <input type="password" id="confirmPassword" placeholder="비밀번호 확인" class="signup-input">
-            <input type="text" id="userschool" placeholder="학교" class="signup-input">
-            <input type="email" id="email" placeholder="이메일" class="signup-input">
-            <button type="submit" class="signup-button">이메일 인증하러 가기</button>
-            <button type="button" onclick="submitSignup()" class="signup-button">가입하기</button>
-            <p id="errorMessage" class="error-message" style="display: none;">모든 필드를 채워주세요</p>
-        </form>
-    </div>
-    
-    <script>
-        // 입력된 데이터 저장 함수
-        function saveInputs() {
-            localStorage.setItem('username', document.getElementById('username').value);
-            localStorage.setItem('password', document.getElementById('password').value);
-            localStorage.setItem('confirmPassword', document.getElementById('confirmPassword').value);
-            localStorage.setItem('userschool', document.getElementById('userschool').value);
-            localStorage.setItem('email', document.getElementById('email').value);
+        
+		
+		<form id="signupForm" class="signup-form" action="joinAction.jsp" method="post">
+    <input type="text" id="userID" name="userID" placeholder="아이디" class="signup-input" required>
+    <input type="password" id="userPassword" name="userPassword" placeholder="비밀번호" class="signup-input" required>
+    <input type="text" id="userSchool" name="userSchool" placeholder="학교" class="signup-input" required>
+    <input type="email" id="userEmail" name="userEmail" placeholder="이메일" class="signup-input" required>  
+
+    <!-- 이메일 인증 버튼 -->
+    <button type="button" class="signup-button" onclick="submitForm()">이메일 인증하러 가기</button>
+
+    <!-- 가입하기 버튼 -->
+    <button type="submit" class="signup-button" onclick="submitSignup()">가입하기</button>
+    <p id="errorMessage" class="error-message" style="display: none;">모든 필드를 채워주세요</p>
+</form>
+
+<script>
+    function saveInputs() {
+        localStorage.setItem('userID', document.getElementById('userID').value);
+        localStorage.setItem('userPassword', document.getElementById('userPassword').value);
+        localStorage.setItem('userSchool', document.getElementById('userSchool').value);
+        localStorage.setItem('userEmail', document.getElementById('userEmail').value);
+    }
+	console.log(userID);
+    function submitForm() {
+        // 폼을 'email.jsp'로 제출
+        var form = document.getElementById('signupForm');
+        form.action = 'email.jsp';
+        saveInputs();
+        form.submit();
+    }
+
+    function loadInputs() {
+        document.getElementById('userID').value = localStorage.getItem('userID') || '';
+        document.getElementById('userPassword').value = localStorage.getItem('userPassword') || '';
+        document.getElementById('userSchool').value = localStorage.getItem('userSchool') || '';
+        document.getElementById('userEmail').value = localStorage.getItem('userEmail') || '';
+    }
+
+    function submitSignup() {
+        var userID = document.getElementById('userID').value.trim();
+        var userPassword = document.getElementById('userPassword').value.trim();
+        var errorMessage = document.getElementById('errorMessage');
+
+        if (userID === "" || userPassword === "") {
+            errorMessage.style.display = 'block';
+        } else {
+            errorMessage.style.display = 'none';
+            alert('회원가입 성공!');
+            localStorage.clear();
         }
+    }
 
-        // 페이지 로드 시 데이터 복원 함수
-        function loadInputs() {
-            document.getElementById('username').value = localStorage.getItem('username') || '';
-            document.getElementById('password').value = localStorage.getItem('password') || '';
-            document.getElementById('confirmPassword').value = localStorage.getItem('confirmPassword') || '';
-            document.getElementById('userschool').value = localStorage.getItem('userschool') || '';
-            document.getElementById('email').value = localStorage.getItem('email') || '';
-        }
+    window.onload = loadInputs;
+</script>
 
-        // 회원가입 유효성 검사 함수
-        function submitSignup() {
-            var username = document.getElementById('username').value.trim();
-            var password = document.getElementById('password').value.trim();
-            var confirmPassword = document.getElementById('confirmPassword').value.trim();
-            var errorMessage = document.getElementById('errorMessage');
-
-            if (username === "" || password === "" || confirmPassword === "" || password !== confirmPassword) {
-                errorMessage.style.display = 'block';
-                document.querySelector('.signup-container').classList.add('shake');
-                setTimeout(() => {
-                    document.querySelector('.signup-container').classList.remove('shake');
-                }, 500);
-            } else {
-                errorMessage.style.display = 'none';
-                alert('회원가입 성공!');
-                localStorage.clear();  // 성공 후 데이터 삭제
-            }
-        }
-
-        // 페이지 로드 시 데이터 복원
-        window.onload = loadInputs;
-    </script>
 </body>
 </html>
