@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -157,5 +159,23 @@
 
         window.onload = loadInputs;
     </script>
+    <%
+	    String userEmail = request.getParameter("userEmail");
+	
+	    // 이메일 정규식 패턴 (e-mirim.hs.kr 도메인만 허용)
+	    String emailRegex = "^[a-zA-Z0-9._%+-]+@e-mirim.hs.kr$";
+	    boolean isValidEmail = userEmail != null && userEmail.matches(emailRegex);
+	
+	    if (!isValidEmail) {
+	        out.println("<script>alert('올바른 이메일 주소를 입력해주세요 (e-mirim.hs.kr)');</script>");
+	        response.sendRedirect("join.jsp"); // 다시 회원가입 페이지로 리디렉션
+	    } else {
+	        // 이메일이 유효하다면, 회원가입 처리 로직을 진행
+	        // 예: 데이터베이스에 저장, 추가 검증 등
+	        out.println("<script>alert('이메일 인증 성공! 회원가입을 진행합니다.');</script>");
+	        // 회원가입 성공 후 다른 페이지로 리디렉션
+	        // response.sendRedirect("successPage.jsp");
+	    }
+    %>
 </body>
 </html>
