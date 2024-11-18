@@ -42,10 +42,13 @@
             out.println("<script>alert('회원가입 실패! 다시 시도해주세요.'); history.back();</script>");
         }
     } catch (Exception e) {
-    	e.printStackTrace();
-        out.println("<script>alert('오류가 발생했습니다. 관리자에게 문의하세요.'); history.back();</script>");
+    	  e.printStackTrace();  // 콘솔에 스택 트레이스 출력
+    	    // 예외를 파일로 기록 (예시)
+    	    out.println("<script>alert('오류가 발생했습니다. ㅋ 관리자에게 문의하세요.'); history.back();</script>");
+			out.println("<script> alert ('집에 갈래유');history.back</script>");
     } finally {
         try { if (pstmt != null) pstmt.close(); } catch (Exception e) {}
         try { if (conn != null) conn.close(); } catch (Exception e) {}
     }
 %>
+
