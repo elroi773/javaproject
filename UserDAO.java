@@ -19,7 +19,7 @@ public class UserDAO {
         try {
             String dbURL = "jdbc:mysql://localhost:3306/bbs";
             String dbID = "root";
-            String dbPassword = "Mysql4344!";  // 본인의 데이터베이스 비밀번호로 변경
+            String dbPassword = "Mysql4344!"; // 본인의 데이터베이스 비밀번호로 변경
             Class.forName("com.mysql.cj.jdbc.Driver"); // MySQL 8.x 드라이버
             conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
         } catch (Exception e) {
@@ -27,7 +27,28 @@ public class UserDAO {
         }
     }
 
-    // 사용자 회원가입 처리 메서드
+    // 로그인 메서드
+    public int login(String userID, String userPassword) {
+        String SQL = "SELECT userPassword FROM user WHERE userID = ?";
+        try {
+            pstmt = conn.prepareStatement(SQL);
+            pstmt.setString(1, userID);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                if (rs.getString("userPassword").equals(userPassword)) {
+                    return 1; // 로그인 성공
+                } else {
+                    return 0; // 비밀번호 틀림
+                }
+            }
+            return -1; // userID가 존재하지 않음
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -2; // 데이터베이스 오류
+        }
+    }
+
+    // 회원가입 메서드
     public int join(User user) {
         String SQL = "INSERT INTO user (userID, userPassword, userSchool, userEmail) VALUES (?, ?, ?, ?)";
         try {
@@ -36,21 +57,21 @@ public class UserDAO {
             pstmt.setString(2, user.getUserPassword());
             pstmt.setString(3, user.getUserSchool());
             pstmt.setString(4, user.getUserEmail());
-            return pstmt.executeUpdate();  // 데이터베이스에 삽입
+            return pstmt.executeUpdate();
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "User registration failed: " + e.getMessage(), e);
-            throw new RuntimeException("Database error during user registration", e);  // 예외 던지기
+            throw new RuntimeException("Database error during user registration", e);
         }
     }
 
-    // 아이디 중복 체크 메서드 
+    // 아이디 중복 체크 메서드
     public boolean isUserIDExist(String userID) {
         String SQL = "SELECT * FROM user WHERE userID = ?";
         try {
             pstmt = conn.prepareStatement(SQL);
             pstmt.setString(1, userID);
             rs = pstmt.executeQuery();
-            return rs.next();  // userID가 존재하면 true 반환
+            return rs.next();
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error checking user ID", e);
             return false;
