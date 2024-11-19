@@ -1,11 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import = "user.UserDAO" %>
-<%@ page import = "java.io.PrintWriter"%>
-<% request.setCharacterEncoding("UTF-8"); %>
-<jsp:useBean id="user" class="user.User" scope="page" />
-<jsp:setProperty name="user" property="userID"/> 
-<jsp:setProperty name="user" property="userPassword"/> 
+<%@ page import="user.UserDAO" %>
+<%@ page import="java.sql.*" %>
+<%@ page session="true" %> 
 
 <!DOCTYPE html>
 <html>
@@ -13,54 +10,39 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/LOGIN.css">
-<title>LOGIN</title>
+<title>LOGIN RESULT</title>
 </head>
 <body>
-	<%
-		String userID = null;
-		if(session.getAttribute("userID") != null){
-			userID = (String)session.getAttribute("userID");
-		}
-		// 한번 로그인 하거나 회원가입한 회원은 다시 로그인할 수 없도록 함
-		if(userID != null){
-			PrintWriter script = response.getWriter();
-			script.println("<script>");
-			script.println("alert('이미 로그인이 되어 있습니다');");
-			script.println("location.href = 'main.jsp';");
-			script.println("</script>");
-			script.close(); // 여기서 스크립트를 닫아 로그인 절차가 계속 진행되지 않도록 합니다.
-			return;
-		}
+    <%
+        String userID = request.getParameter("userID");
+        String userPassword = request.getParameter("userPassword");
 
-		UserDAO userDAO = new UserDAO();
-		int result = userDAO.login(user.getUserID(), user.getUserPassword());
+        if (userID == null || userPassword == null || userID.isEmpty() || userPassword.isEmpty()) {
+            out.println("<h2>아이디와 비밀번호를 모두 입력해주세요.</h2>");
+            return;
+        }
 
-		if(result == 1){
-			session.setAttribute("userID", user.getUserID()); // 회원의 아이디를 세션값으로 저장
-			PrintWriter script = response.getWriter();
-			script.println("<script>");
-			script.println("location.href = 'main.jsp';");
-			script.println("</script>");
-		} else if(result == 0){
-			PrintWriter script = response.getWriter();
-			script.println("<script>");
-			script.println("alert('비밀번호가 틀립니다');");
-			script.println("history.back();");
-			script.println("</script>");
-		} else if(result == -1){
-			PrintWriter script = response.getWriter();
-			script.println("<script>");
-			script.println("alert('존재하지 않는 아이디입니다');");
-			script.println("history.back();");
-			script.println("</script>");
-		} else if(result == -2){
-			PrintWriter script = response.getWriter();
-			script.println("<script>");
-			script.println("alert('데이터베이스 오류가 발생했습니다.');");
-			script.println("history.back();");
-			script.println("</script>");
-		}
-	%>
+        UserDAO userDAO = new UserDAO();
+        int result = -2;
+        try {
+            result = userDAO.login(userID, userPassword);
+        } catch (Exception e) {
+            e.printStackTrace(); // 콘솔에 출력
+            out.println("<h2>로그인 처리 중 오류가 발생했습니다. 관리자에게 문의하세요.</h2>");
+            return;
+        }
 
+        if (result == 1) {
+            session.setAttribute("userID", userID);
+            response.sendRedirect("main.jsp");
+            return;
+        } else if (result == 0) {
+            out.println("<h2>비밀번호가 틀렸습니다.</h2>");
+        } else if (result == -1) {
+            out.println("<h2>존재하지 않는 아이디입니다.</h2>");
+        } else {
+            out.println("<h2>로그인 중 오류가 발생했습니다. 다시 시도해 주세요.</h2>");
+        }
+    %>
 </body>
 </html>
