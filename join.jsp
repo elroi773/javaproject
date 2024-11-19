@@ -73,29 +73,43 @@
             <input type="text" id="userSchool" name="userSchool" placeholder="학교" class="signup-input" required>
             <input type="email" id="userEmail" name="userEmail" placeholder="이메일" class="signup-input" required>
             <p id="errorMessage" class="error-message" style="display: none;">올바른 이메일 주소를 입력해주세요.</p>
-            <button type="submit" class="signup-button">이메일 인증</button>
+            <button type="button" class="signup-button" onclick="redirectToVerification()">가입하기</button>
         </form>
     </div>
 
     <script>
-    
-	    let isEmailVerified = false; // 이메일 인증 여부
-	
-	    function verifyEmail() {
-	        // 인증 로직 성공 시 호출
-	        isEmailVerified = true;
-	        alert("이메일 인증에 성공했습니다!");
-	    }
-	
-	    document.getElementById('signupForm').addEventListener('submit', function (event) {
-	        if (!isEmailVerified) {
-	            event.preventDefault();
-	            alert("이메일 인증을 완료해주세요.");
-	        }
-	    });
-</script>
+        function redirectToVerification() {
+            // 이메일을 임시 저장할 수 있도록 sessionStorage에 저장
+            let userID = document.getElementById('userID').value;
+            let userPassword = document.getElementById('userPassword').value;
+            let userSchool = document.getElementById('userSchool').value;
+            let userEmail = document.getElementById('userEmail').value;
+            
+            sessionStorage.setItem('userID', userID);
+            sessionStorage.setItem('userPassword', userPassword);
+            sessionStorage.setItem('userSchool', userSchool);
+            sessionStorage.setItem('userEmail', userEmail);
 
-        });
+            // 이메일 인증 페이지로 이동
+            window.location.href = 'email.jsp'; // 실제 이메일 인증 페이지 URL로 변경
+        }
+
+        // 인증 완료 후 페이지 복귀
+        function completeRegistration() {
+            let userID = sessionStorage.getItem('userID');
+            let userPassword = sessionStorage.getItem('userPassword');
+            let userSchool = sessionStorage.getItem('userSchool');
+            let userEmail = sessionStorage.getItem('userEmail');
+
+            // 사용자가 인증을 완료하고 나면 회원가입 폼에 다시 채우고 제출
+            document.getElementById('userID').value = userID;
+            document.getElementById('userPassword').value = userPassword;
+            document.getElementById('userSchool').value = userSchool;
+            document.getElementById('userEmail').value = userEmail;
+
+            // 예시: 자동으로 제출하도록 할 수도 있습니다.
+            // document.getElementById('signupForm').submit();
+        }
     </script>
 </body>
 </html>
