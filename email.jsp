@@ -112,7 +112,7 @@
     <div>
         <input id="email" placeholder="이메일"><br>
         <input id="name" placeholder="이름"><br>
-        <input type="button" onclick="send();" value="메일 보내기"><br><br>
+		<input type="button" onclick="validateAndSend();" value="메일 보내기"><br><br>
         
         <h2>인증번호 확인</h2>
         <input id="verificationCodeInput"><br>
@@ -124,10 +124,25 @@
 
     let verificationCode;  // 전역 변수로 인증번호를 저장
 
+    // 이메일 도메인 검증 후 send() 함수 실행
+    function validateAndSend() {
+        let email = document.getElementById("email").value;
+
+        // 이메일 정규식 패턴 (e-mirim.hs.kr 도메인만 허용)
+        let emailRegex = /^[a-zA-Z0-9._%+-]+@e-mirim\.hs\.kr$/;
+
+        if (!emailRegex.test(email)) {
+            alert("올바른 이메일 주소를 입력해주세요 (e-mirim.hs.kr 도메인만 허용)");
+            return; // 잘못된 도메인이면 함수 종료
+        }
+
+        send(); // 도메인이 올바른 경우 send() 함수 호출
+    }
+
     function send() {
         let email = document.getElementById("email").value;
         let name = document.getElementById("name").value;
-
+        
         // 6자리 랜덤 인증번호 생성 및 저장
         verificationCode = Math.floor(100000 + Math.random() * 900000);
 
@@ -136,7 +151,7 @@
             'name': name,
             'content': verificationCode // 인증번호를 content로 보냄
         };
-
+        
         emailjs.send("service_g6iu7xz", "template_003kqyx", params)
             .then(response => {
                 console.log("메일 전송 성공", response.status, response.text);
@@ -160,4 +175,5 @@
         }
     }
 </script>
+
 </html>
