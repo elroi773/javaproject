@@ -1,6 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -22,160 +20,82 @@
             justify-content: center;
             align-items: center;
             color: rgb(229, 219, 151);
-            overflow: hidden;
-        }
-        .top-link {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: 'GmarketSansMedium';
-            font-size: 1.2rem;
-            color: #4cae4f;
-            margin: 10px 0;
-            z-index: 100;
+            background-color: #f3f3f3;
         }
         .signup-container {
             width: 300px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.9);
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 1.5s ease-in-out;
         }
         .signup-title {
-            font-family: 'GmarketSansMedium';
             font-size: 2.5rem;
             color: #4cae4f;
-            letter-spacing: 0.1em;
             margin-bottom: 20px;
         }
         .signup-input {
-            font-family: 'GmarketSansMedium';
             width: 100%;
-            padding: 15px;
+            padding: 10px;
             margin: 10px 0;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            border-radius: 10px;
-            color: #4cae4f;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             font-size: 1rem;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-        .signup-input:focus {
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
         .signup-button {
-            font-family: 'GmarketSansMedium';
             width: 100%;
-            padding: 15px;
+            padding: 10px;
             margin: 20px 0;
             background-color: #4cae4f;
             border: none;
-            border-radius: 10px;
-            font-size: 1.2rem;
+            border-radius: 5px;
+            font-size: 1rem;
             color: white;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
         .signup-button:hover {
             background-color: #3e8e41;
         }
         .error-message {
-            font-family: 'GmarketSansMedium';
-            color: #ff3333;
+            color: red;
             font-size: 0.9rem;
-            margin-top: 10px;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @media (max-width: 600px) {
-            .signup-container {
-                width: 90%;
-            }
         }
     </style>
 </head>
 <body>
     <div class="signup-container">
         <h1 class="signup-title">회원가입</h1>
-        <form id="signupForm" class="signup-form" action="joinAction.jsp" method="post">
+        <form id="signupForm" action="joinAction.jsp" method="post">
             <input type="text" id="userID" name="userID" placeholder="아이디" class="signup-input" required>
             <input type="password" id="userPassword" name="userPassword" placeholder="비밀번호" class="signup-input" required>
             <input type="text" id="userSchool" name="userSchool" placeholder="학교" class="signup-input" required>
-            <input type="email" id="userEmail" name="userEmail" placeholder="이메일" class="signup-input" required>  
-            
-            <button type="button" class="signup-button" onclick="submitForm()">이메일 인증하러 가기</button>
-            <button type="submit" class="signup-button" onclick="submitSignup()">가입하기</button>
-            <p id="errorMessage" class="error-message" style="display: none;">모든 필드를 채워주세요</p>
+            <input type="email" id="userEmail" name="userEmail" placeholder="이메일" class="signup-input" required>
+            <p id="errorMessage" class="error-message" style="display: none;">올바른 이메일 주소를 입력해주세요.</p>
+            <button type="submit" class="signup-button">이메일 인증</button>
         </form>
     </div>
 
     <script>
-        function saveInputs() {
-            localStorage.setItem('userID', document.getElementById('userID').value);
-            localStorage.setItem('userPassword', document.getElementById('userPassword').value);
-            localStorage.setItem('userSchool', document.getElementById('userSchool').value);
-            localStorage.setItem('userEmail', document.getElementById('userEmail').value);
-        }
-
-        function submitForm() {
-            var form = document.getElementById('signupForm');
-            form.action = 'email.jsp';
-            saveInputs();
-            form.submit();
-        }
-
-        function loadInputs() {
-            document.getElementById('userID').value = localStorage.getItem('userID') || '';
-            document.getElementById('userPassword').value = localStorage.getItem('userPassword') || '';
-            document.getElementById('userSchool').value = localStorage.getItem('userSchool') || '';
-            document.getElementById('userEmail').value = localStorage.getItem('userEmail') || '';
-        }
-
-        function submitSignup() {
-            var userID = document.getElementById('userID').value.trim();
-            var userPassword = document.getElementById('userPassword').value.trim();
-            var errorMessage = document.getElementById('errorMessage');
-
-            if (userID === "" || userPassword === "") {
-                errorMessage.style.display = 'block';
-                return;
-            }
-
-            errorMessage.style.display = 'none';
-            saveInputs();
-
-            var form = document.getElementById('signupForm');
-            form.action = 'joinAction.jsp';
-            form.method = 'post';
-            form.submit();
-        }
-
-        window.onload = loadInputs;
-    </script>
-    <%
-	    String userEmail = request.getParameter("userEmail");
+    
+	    let isEmailVerified = false; // 이메일 인증 여부
 	
-	    // 이메일 정규식 패턴 (e-mirim.hs.kr 도메인만 허용)
-	    String emailRegex = "^[a-zA-Z0-9._%+-]+@e-mirim.hs.kr$";
-	    boolean isValidEmail = userEmail != null && userEmail.matches(emailRegex);
-	
-	    if (!isValidEmail) {
-	        out.println("<script>alert('올바른 이메일 주소를 입력해주세요 (e-mirim.hs.kr)');</script>");
-	        response.sendRedirect("join.jsp"); // 다시 회원가입 페이지로 리디렉션
-	    } else {
-	        // 이메일이 유효하다면, 회원가입 처리 로직을 진행
-	        // 예: 데이터베이스에 저장, 추가 검증 등
-	        out.println("<script>alert('이메일 인증 성공! 회원가입을 진행합니다.');</script>");
-	        // 회원가입 성공 후 다른 페이지로 리디렉션
-	        // response.sendRedirect("successPage.jsp");
+	    function verifyEmail() {
+	        // 인증 로직 성공 시 호출
+	        isEmailVerified = true;
+	        alert("이메일 인증에 성공했습니다!");
 	    }
-    %>
+	
+	    document.getElementById('signupForm').addEventListener('submit', function (event) {
+	        if (!isEmailVerified) {
+	            event.preventDefault();
+	            alert("이메일 인증을 완료해주세요.");
+	        }
+	    });
+</script>
+
+        });
+    </script>
 </body>
 </html>
