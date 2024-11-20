@@ -5,15 +5,9 @@ public class User {
     private String userPassword;
     private String userSchool;
     private String userEmail;
+    private String userName;  // 이름 추가
 
-    
-    public User(String userID, String userPassword, String userSchool, String userEmail) {
-        this.userID = userID;
-        this.userPassword = userPassword;
-        this.userSchool = userSchool;
-        this.userEmail = userEmail;
-    }
-
+    // getters and setters
     public String getUserID() {
         return userID;
     }
@@ -45,5 +39,12 @@ public class User {
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
     }
-    
+
+    public String getUserName() {  // 이름 getter 추가
+        return userName;
+    }
+
+    public void setUserName(String userName) {  // 이름 setter 추가
+        this.userName = userName;
+    }
 }
