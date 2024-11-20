@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import = "java.io.PrintWriter" %>
+<%@ page import="java.sql.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.Date" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -59,50 +59,81 @@
             font-size: 0.8em;
             color: #bbb;
         }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #4cae4f;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            font-family: 'GmarketSansMedium';
+        }
+
+        button:hover {
+            background-color: #388e3c;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>미림 마이스터고 대신 전해드립니다 </h1>
+        <h1>미림 마이스터고 게시판</h1>
         <div class="posts" id="posts">
-            <!-- 게시물이 여기에 표시됩니다 -->
+            <% 
+                // DB 연결 변수
+                Connection conn = null;
+                PreparedStatement stmt = null;
+                ResultSet rs = null;
+
+                try {
+                    // DB 연결 설정
+                    String dbURL = "jdbc:mysql://localhost:3306/bbs"; // 데이터베이스 URL
+                    String dbUser = "root"; // DB 사용자명
+                    String dbPass = "Mysql4344!"; // DB 비밀번호
+                    Class.forName("com.mysql.cj.jdbc.Driver"); // JDBC 드라이버 로드
+                    conn = DriverManager.getConnection(dbURL, dbUser, dbPass); // DB 연결
+
+                    // 게시글 조회 쿼리
+                    String selectSql = "SELECT * FROM posts ORDER BY created_at DESC";
+                    stmt = conn.prepareStatement(selectSql);
+                    rs = stmt.executeQuery();
+
+                    // 게시글 출력
+                    while (rs.next()) {
+                        String userID = rs.getString("userID");
+                        String content = rs.getString("content");
+                        Date createdAt = rs.getTimestamp("created_at");
+
+                        out.println("<div class='post'>");
+                        out.println("<h3>" + content + "</h3>");
+                        out.println("<p class='author'>작성자: " + userID + "</p>");
+                        out.println("<p class='date'>작성일: " + createdAt + "</p>");
+                        out.println("</div>");
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    out.println("<h3>게시글을 불러오는 데 오류가 발생했습니다.</h3>");
+                } finally {
+                    try {
+                        if (rs != null) rs.close();
+                        if (stmt != null) stmt.close();
+                        if (conn != null) conn.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            %>
         </div>
+        <form action="write.jsp" method="get">
+            <button type="submit">글 쓰러가기</button>
+        </form>
     </div>
-    <button onclick="write()">글 쓰러가기 </button>
-    <script>
-        function write() {
-        // 폼을 'email.jsp'로 제출
-        var form = document.getElementById('signupForm');
-        form.action = 'write.jsp';
-    }
-        // URL에서 파라미터 추출 함수
-        function getParameterByName(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
-
-        // 게시물 데이터 추출
-        const title = getParameterByName('title');
-        const content = getParameterByName('content');
-        const author = getParameterByName('author');
-
-        const postsDiv = document.getElementById('posts');
-
-        // 현재 시간(게시물 작성 시간) 생성
-        const currentDate = new Date().toLocaleString();
-
-        // 새로운 게시물 생성
-        const postDiv = document.createElement('div');
-        postDiv.classList.add('post');
-        postDiv.innerHTML = `
-            <h3>${title}</h3>
-            <p>${content}</p>
-            <p class="author">작성자: ${author}</p>
-            <p class="date">작성일: ${currentDate}</p>
-        `;
-
-        // 게시물 추가
-        postsDiv.prepend(postDiv);
-    </script>
 </body>
 </html>
