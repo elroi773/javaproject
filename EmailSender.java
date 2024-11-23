@@ -63,15 +63,20 @@ public class EmailSender {
         return String.format("%06d", random.nextInt(1000000)); // 6자리 랜덤 숫자
     }
 
-    /**
-     * 이메일 주소 유효성 검증 메서드
-     */
+    //이메일 확인 
     public static boolean isValidEmail(String email) {
-        String emailRegex = "^(s(23|24|25)\\d{2}[0-7][0-2]|d(23|24|25)\\d{2}[0-3][0-6])@e-mirim\\.hs\\.kr$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-    }
+        // 도메인 확인
+    	 if (!email.endsWith("@e-mirim.hs.kr")) {
+             return false; // 도메인이 맞지 않으면 false 반환
+         }
+
+         // 이메일 정규식: 첫 글자 s 또는 d, 뒤에 숫자 두 개, 두 자리 숫자 범위 검사
+         String emailRegex = "^[sd]\\d{2}[0-7][0-2]\\d{2}@e-mirim\\.hs\\.kr$";
+         Pattern pattern = Pattern.compile(emailRegex);
+         Matcher matcher = pattern.matcher(email);
+         
+         return matcher.matches(); // 정규식이 일치하면 true 반환
+     }
 
     /**
      * 인증 코드 전송 메서드
