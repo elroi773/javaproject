@@ -65,18 +65,29 @@ public class EmailSender {
 
     //이메일 확인 
     public static boolean isValidEmail(String email) {
-        // 도메인 확인
-    	 if (!email.endsWith("@e-mirim.hs.kr")) {
-             return false; // 도메인이 맞지 않으면 false 반환
-         }
+        // 이메일이 null이거나 비어있으면 무조건 false 반환
+        if (email == null || email.isEmpty()) {
+            return false;
+        }
 
-         // 이메일 정규식: 첫 글자 s 또는 d, 뒤에 숫자 두 개, 두 자리 숫자 범위 검사
-         String emailRegex = "^[sd]\\d{2}[0-7][0-2]\\d{2}@e-mirim\\.hs\\.kr$";
-         Pattern pattern = Pattern.compile(emailRegex);
-         Matcher matcher = pattern.matcher(email);
-         
-         return matcher.matches(); // 정규식이 일치하면 true 반환
-     }
+        // 도메인 확인
+        if (!email.endsWith("@e-mirim.hs.kr")) {
+            return false; // 도메인이 맞지 않으면 false 반환
+        }
+
+        // 앞자리가 s 또는 d가 아닐 경우 false 반환
+        char firstChar = email.charAt(0); // 이메일의 첫 번째 문자 확인
+        if (firstChar != 's' && firstChar != 'd') {
+            return false;
+        }
+
+        // 이메일 정규식 검사
+        String emailRegex = "^[sd]\\d{2}[0-7][0-2]\\d{2}@e-mirim\\.hs\\.kr$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+
+        return matcher.matches(); // 정규식이 일치하면 true 반환
+    }
 
     /**
      * 인증 코드 전송 메서드
