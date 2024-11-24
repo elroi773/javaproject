@@ -53,6 +53,7 @@
 
         /* 회원가입 제목 */
         .signup-title {
+        font-family: 'GmarketSansMedium';
             font-size: 2.5rem;
             color: #4cae4f;
             margin-bottom: 20px;
@@ -62,6 +63,7 @@
 
         /* 입력 필드 */
         .signup-input {
+        font-family: 'GmarketSansMedium';
             width: 100%;
             padding: 15px;
             margin: 10px 0;
@@ -161,6 +163,7 @@
             background-color: #f3f3f3;
         }
         .signup-container {
+        font-family: 'GmarketSansMedium';
             width: 300px;
             text-align: center;
             background: rgba(255, 255, 255, 0.9);
@@ -169,11 +172,13 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
         .signup-title {
+        font-family: 'GmarketSansMedium';
             font-size: 2.5rem;
             color: #4cae4f;
             margin-bottom: 20px;
         }
         .signup-input {
+        font-family: 'GmarketSansMedium';
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -197,6 +202,7 @@
             background-color: #3e8e41;
         }
         .error-message {
+        font-family: 'GmarketSansMedium';
             color: red;
             font-size: 0.9rem;
         }
@@ -205,7 +211,7 @@
 <body>
     <div class="signup-container">
         <h1 class="signup-title">회원가입</h1>
-        <form id="signupForm" action="joinAction.jsp" method="post">
+        <form id="signupForm" action="joinAction.jsp" method="post" accept-charset="UTF-8">
             <input type="text" id="userID" name="userID" placeholder="아이디" class="signup-input" required>
             <input type="password" id="userPassword" name="userPassword" placeholder="비밀번호" class="signup-input" required>
             <input type="text" id="userSchool" name="userSchool" placeholder="학교" class="signup-input" required>
