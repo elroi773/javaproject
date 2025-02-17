@@ -3,10 +3,18 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="javax.servlet.http.HttpSession" %>
 
+<%
+    request.setCharacterEncoding("UTF-8");  // 요청의 문자셋을 UTF-8로 설정
+    response.setCharacterEncoding("UTF-8"); // 응답의 문자셋을 UTF-8로 설정
+%>
+
+
+
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
+	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시판</title>
     <style>
@@ -168,9 +176,17 @@
     %>
     <div class="header">
         <h1>미림 마이스터고 게시판</h1>
-        <div class="user-info">
-            로그인된 사용자: <%= userID %>
-        </div>
+		 <div class="user-info">
+		    로그인된 사용자: <%= 
+		        String userID = (String) session.getAttribute("userID");
+		        if (userID != null) {  // null 체크
+		            userID = new String(userID.getBytes("ISO-8859-1"), "UTF-8");  // 인코딩 변환
+		            out.println(userID);  // userID를 출력
+		        } else {
+		            out.println("로그인된 사용자 정보 없음");
+		        }
+		    %>
+		</div>
         <a href="logoutAction.jsp">로그아웃</a>
     </div>
     <form action="write.jsp" method="get">
