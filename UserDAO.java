@@ -50,6 +50,12 @@ public class UserDAO {
 
     // 회원가입 메서드
     public int join(User user) {
+        // 아이디 중복 확인
+        if (isUserIDExist(user.getUserID())) {
+            logger.log(Level.WARNING, "User ID already exists: " + user.getUserID());
+            return -1; // 이미 존재하는 ID일 경우 처리
+        }
+
         String SQL = "INSERT INTO user (userID, userPassword, userSchool, userEmail) VALUES (?, ?, ?, ?)";
         try {
             pstmt = conn.prepareStatement(SQL);
@@ -57,7 +63,7 @@ public class UserDAO {
             pstmt.setString(2, user.getUserPassword());
             pstmt.setString(3, user.getUserSchool());
             pstmt.setString(4, user.getUserEmail());
-            return pstmt.executeUpdate();
+            return pstmt.executeUpdate(); // 정상적인 회원가입
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "User registration failed: " + e.getMessage(), e);
             throw new RuntimeException("Database error during user registration", e);
@@ -71,7 +77,7 @@ public class UserDAO {
             pstmt = conn.prepareStatement(SQL);
             pstmt.setString(1, userID);
             rs = pstmt.executeQuery();
-            return rs.next();
+            return rs.next(); // 존재하면 true 반환
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error checking user ID", e);
             return false;
