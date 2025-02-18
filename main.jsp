@@ -4,11 +4,22 @@
 <%@ page import="javax.servlet.http.HttpSession" %>
 
 <%
-    request.setCharacterEncoding("UTF-8");  // 요청의 문자셋을 UTF-8로 설정
-    response.setCharacterEncoding("UTF-8"); // 응답의 문자셋을 UTF-8로 설정
+    request.setCharacterEncoding("UTF-8");
+    response.setCharacterEncoding("UTF-8");
+    
+    HttpSession session5 = request.getSession();
+    String userID = (String) session5.getAttribute("userID");
+    
+    if (userID == null || userID.isEmpty()) {
 %>
-
-
+    <script>
+        alert("로그인이 필요합니다.");
+        location.href = "login.jsp";
+    </script>
+<%
+        return;
+    }
+%>
 
 
 <!DOCTYPE html>
@@ -157,75 +168,57 @@
     </style>
 </head>
 <body>
-    <%
-    
-    	response.setCharacterEncoding("UTF-8");
-    	
-        HttpSession session5 = request.getSession();
-        String userID = (String) session.getAttribute("userID");
-
-        if (userID == null || userID.isEmpty()) {
-    %>
-        <script>
-            alert("로그인이 필요합니다.");
-            location.href = "login.jsp";
-        </script>
-    <%
-            return;
-        }
-    %>
-    <div class="header">
+   <div class="header">
         <h1>미림 마이스터고 게시판</h1>
-		 <div class="user-info">
-		    로그인된 사용자: <%= 
-		        String userID = (String) session.getAttribute("userID");
-		        if (userID != null) {  // null 체크
-		            userID = new String(userID.getBytes("ISO-8859-1"), "UTF-8");  // 인코딩 변환
-		            out.println(userID);  // userID를 출력
-		        } else {
-		            out.println("로그인된 사용자 정보 없음");
-		        }
-		    %>
-		</div>
+        <div class="user-info">
+            <%
+                if (userID != null) { // null 체크
+                    userID = new String(userID.getBytes("ISO-8859-1"), "UTF-8"); // 인코딩 변환
+            %>
+                    로그인된 사용자: <%= userID %>
+            <%
+                } else {
+            %>
+                    로그인되지 않았습니다.
+            <%
+                }
+            %>
+        </div>
         <a href="logoutAction.jsp">로그아웃</a>
     </div>
     <form action="write.jsp" method="get">
-            <button type="submit">글 쓰러가기</button>
-        </form>
+        <button type="submit">글 쓰러가기</button>
+    </form>
     <div class="container">
         <div class="posts" id="posts">
             <% 
-                // DB 연결 변수
                 Connection conn = null;
                 PreparedStatement stmt = null;
                 ResultSet rs = null;
-
+                
                 try {
-                    // DB 연결 설정
-                    String dbURL = "jdbc:mysql://localhost:3306/bbs"; // 데이터베이스 URL
-                    String dbUser = "root"; // DB 사용자명
-                    String dbPass = "Mysql4344!"; // DB 비밀번호
-                    Class.forName("com.mysql.cj.jdbc.Driver"); // JDBC 드라이버 로드
-                    conn = DriverManager.getConnection(dbURL, dbUser, dbPass); // DB 연결
-
-                    // 게시글 조회 쿼리
+                    String dbURL = "jdbc:mysql://localhost:3306/bbs";
+                    String dbUser = "root";
+                    String dbPass = "Mysql4344!";
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    conn = DriverManager.getConnection(dbURL, dbUser, dbPass);
+                    
                     String selectSql = "SELECT * FROM posts ORDER BY created_at DESC";
                     stmt = conn.prepareStatement(selectSql);
                     rs = stmt.executeQuery();
-
-                    // 게시글 출력
+                    
                     while (rs.next()) {
                         String postUserID = rs.getString("userID");
                         String content = rs.getString("content");
                         Date createdAt = rs.getTimestamp("created_at");
-
+                        
                         out.println("<div class='post'>");
                         out.println("<h3>" + content + "</h3>");
                         out.println("<p class='author'>작성자: " + postUserID + "</p>");
                         out.println("<p class='date'>작성일: " + createdAt + "</p>");
                         out.println("</div>");
                     }
-
+                    
                 } catch (Exception e) {
                     e.printStackTrace();
                     out.println("<h3>게시글을 불러오는 데 오류가 발생했습니다.</h3>");
@@ -240,7 +233,6 @@
                 }
             %>
         </div>
-        
     </div>
 </body>
 </html>
