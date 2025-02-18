@@ -17,7 +17,7 @@ public class UserDAO {
 
     public UserDAO() {
         try {
-            String dbURL = "jdbc:mysql://localhost:3306/bbs";
+        	String dbURL = "jdbc:mysql://localhost:3306/bbs?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";
             String dbID = "root";
             String dbPassword = "Mysql4344!"; // 본인의 데이터베이스 비밀번호로 변경
             Class.forName("com.mysql.cj.jdbc.Driver"); // MySQL 8.x 드라이버
