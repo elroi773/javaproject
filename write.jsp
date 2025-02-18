@@ -1,6 +1,18 @@
 <%@ page import="javax.servlet.http.HttpSession" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
+<%
+    request.setCharacterEncoding("UTF-8");
+
+    // 로그인된 userID 가져오기
+    HttpSession session5 = request.getSession(false);
+    String userID = (session5 != null) ? (String) session5.getAttribute("userID") : null;
+
+    // userID가 존재하고, 한글이 깨질 경우 변환
+    if (userID != null) {
+        userID = new String(userID.getBytes("ISO-8859-1"), "UTF-8");
+    }
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -77,7 +89,7 @@
         }
 
         button {
-        	font-family: 'GmarketSansMedium';
+            font-family: 'GmarketSansMedium';
             padding: 10px 20px;
             background-color: #4cae4f;
             color: white;
@@ -90,13 +102,13 @@
         button:hover {
             background-color: #45a048;
         }
-        #content{
+
+        #content {
             font-family: 'GmarketSansMedium';
         }
     </style>
     <script>
         function selectMode(isAnonymous) {
-            // 버튼 스타일 변경
             document.getElementById('btn-anonymous').classList.remove('selected');
             document.getElementById('btn-userid').classList.remove('selected');
             if (isAnonymous === 'yes') {
@@ -105,7 +117,6 @@
                 document.getElementById('btn-userid').classList.add('selected');
             }
 
-            // 숨겨진 input 값 설정
             document.getElementById('isAnonymousInput').value = isAnonymous;
         }
     </script>
@@ -118,23 +129,16 @@
             <textarea id="content" name="content" rows="5" placeholder="내용을 입력하세요" required></textarea>
 
             <div class="current-name">
-                <% 
-                    // 로그인된 userID 가져오기
-                    HttpSession session5 = request.getSession(false);
-                    String userID = (session5 != null) ? (String) session5.getAttribute("userID") : null;
-                %>
-
                 <% if (userID != null) { %>
                     <p><strong>작성자:</strong> <%= userID %></p>
                     <input type="hidden" name="userID" value="<%= userID %>">
-                    
+
                     <!-- 익명/노익명 버튼 -->
                     <div class="button-group">
                         <button type="button" class="btn" id="btn-userid" onclick="selectMode('no')">노익명 (사용자명 사용)</button>
                         <button type="button" class="btn" id="btn-anonymous" onclick="selectMode('yes')">익명</button>
                     </div>
                     
-                    <!-- 숨겨진 input -->
                     <input type="hidden" id="isAnonymousInput" name="isAnonymous" value="no">
                 <% } else { %>
                     <p>로그인되지 않은 상태입니다. 글 작성 시 익명으로 작성됩니다.</p>
