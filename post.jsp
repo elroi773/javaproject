@@ -1,6 +1,23 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="java.util.Date" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+    // postID 값을 request에서 가져옴
+    String postIDParam = request.getParameter("postID");
+    int currentPostID = 0; // 기본값 설정
+
+    if (postIDParam != null && !postIDParam.isEmpty()) {
+        currentPostID = Integer.parseInt(postIDParam);
+    } else {
+%>
+    <script>
+        alert("잘못된 접근입니다.");
+        location.href = "main.jsp";
+    </script>
+<%
+        return;
+    }
+%>
 
 <%
     request.setCharacterEncoding("UTF-8");
@@ -40,10 +57,11 @@
 
 <h3>댓글</h3>
 <form action="addComment.jsp" method="post">
-    <input type="hidden" name="postID" value="<%= postID %>">
+	<input type="hidden" name="postID" value="<%= currentPostID %>">
     <input type="text" name="content" placeholder="댓글을 입력하세요..." required>
     <button type="submit">댓글 작성</button>
 </form>
+
 
 <%
     // 댓글 가져오기
